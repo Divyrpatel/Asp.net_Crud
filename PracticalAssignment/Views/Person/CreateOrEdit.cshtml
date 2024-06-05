@@ -1,0 +1,103 @@
+﻿@using Project.Models;
+
+@model Project.Models.Person
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("CreateOrEdit", "Person", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4> Create Form </h4>
+        
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">                
+                    @Html.HiddenFor(model => model.Person_Id, new { htmlAttributes = new { @class = "form-control" } })                 
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Address, new { htmlAttributes = new {style = "width: 635px; height: 60px;", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                </div>
+                
+                <div class="form-group">
+                    @Html.LabelFor(model => model.MobileNo, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.MobileNo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label " })
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                </div>
+                
+            </div>
+            <div class="col-md-6">
+                  <div class="form-group">
+                    @Html.LabelFor(model => model.State_Id, htmlAttributes: new { @class = "control-label " })
+                    @Html.DropDownListFor(model => model.State_Id, (SelectList)ViewBag.stateselect, " Select State ", new { @class = "form-control" , id="ddlState"})
+                    @Html.ValidationMessageFor(model => model.State_Id, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.City_Id, htmlAttributes: new { @class = "control-label " })
+                    @Html.DropDownListFor(model => model.City_Id, (SelectList)ViewBag.cityselect, " Select City ", new { @class = "form-control" , id="ddlCity"})
+                </div>
+                            
+                <div class="form-group mt-4">
+
+                    @if(Model.Person_Id != 0)
+                    {
+                        <input type="submit" value="Edit" class="btn btn-primary" />
+                    }
+                    else
+                    {
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    }
+                   &nbsp;&nbsp;&nbsp;
+                  &nbsp;&nbsp;&nbsp;@Html.ActionLink("Back to List", "Index", "Person")
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#ddlState').change(function () {
+            $.ajax({
+                type: "POST",
+                url: "GetCities",
+                data: {
+                    id: $('#ddlState').val()
+                },
+                datatype: "json",
+                success: function (data) {
+                    $("#ddlCity").html("");
+                    $(data).each(function (index, item) {
+                        $("#ddlCity").append('<option value="' + item.city_Id + '">' + item.name + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>

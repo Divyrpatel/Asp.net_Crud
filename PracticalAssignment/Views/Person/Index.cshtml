@@ -1,0 +1,90 @@
+﻿@using Project.Models;
+
+@model IEnumerable<Project.Models.Person>;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+
+    #addr, #desc {
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+    }
+</style>
+
+<h2 class="text-center">Person List</h2>
+
+@if (TempData["MsgaEdit"] != null)
+{
+    <p class="alert alert-success" id="successMsg">@TempData["MsgaEdit"]</p>
+}
+
+<p>
+    @Html.ActionLink("+ Create New", "CreateOrEdit", new { id = "" }, new { @class = "btn btn-danger" })
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Person_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th colspan="3" class="text-center"> Action </th>
+        </tr>
+      
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Person_Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MobileNo)
+                </td>
+                <td>
+                    <span id="addr"> @Html.DisplayFor(modelItem => item.Address)</span>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CityName)
+                </td>                          
+                <td>
+                    @Html.ActionLink("Edit", "CreateOrEdit", new { id = item.Person_Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Person_Id }, new { @class = "btn btn-danger", onclick="return confirm('Are You Sure ,You Want to Delete This Record?')" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>
